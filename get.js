@@ -5,13 +5,13 @@ export const main = handler(async (event, context) => {
     const params = {
         TableName: process.env.tableName,
         Key: {
-            userId: "123",
+            userId: event.requestContext.identity.cognitoIdentityId,
             noteId: event.pathParameters.id
         }
     };
 
     const result = await dynamoDb.get(params);
-    if(!result.Item) {
+    if (!result.Item) {
         throw new Error("Item not found.");
     }
 
