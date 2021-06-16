@@ -1,5 +1,10 @@
 service: notes-api
 
+# Create our resources with separate CloudFormation templates
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
+
 # Create an optimized package for our functions
 package:
   individually: true
@@ -45,6 +50,7 @@ functions:
       - http:
           path: notes
           method: post
+          cors: true
           authorizer: aws_iam
   # Defines an HTTP API endpoint that calls the main function in get.js
   # - path: url path is /notes/{id}
@@ -55,6 +61,7 @@ functions:
       - http:
           path: notes/{id}
           method: get
+          cors: true
           authorizer: aws_iam
   list:
     handler: list.main
@@ -62,6 +69,7 @@ functions:
       - http:
           path: notes
           method: get
+          cors: true
           authorizer: aws_iam  
   update:
     handler: update.main
@@ -69,13 +77,15 @@ functions:
       - http:
           path: notes/{id}
           method: put
+          cors: true
           authorizer: aws_iam     
   delete:
     handler: delete.main
     events:
       - http:
           path: notes/{id}
-          method: delete  
+          method: delete
+          cors: true  
           authorizer: aws_iam
   billing:
     handler: billing.main
@@ -83,4 +93,5 @@ functions:
       - http:
           path: billing
           method: post
+          cors: true
           authorizer: aws_iam
